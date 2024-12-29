@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('male_players', function (Blueprint $table) {
-            $table->foreignId('player_id')->primary()->nullable(false)->constrained()->onDelete('cascade');
+            $table->foreignId('player_id')->primary()->nullable(false)->constrained();
             $table->unsignedSmallInteger('stength')->nullable(false)->default(0);
             $table->float('movement_speed')->nullable(false)->default(0.0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

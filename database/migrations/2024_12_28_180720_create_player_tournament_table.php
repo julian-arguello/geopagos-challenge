@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('player_tournament', function (Blueprint $table) {
-            $table->primary(['player_id','tournament_id']);
-            $table->foreignId('player_id')->nullable(false)->constrained()->onDelete('cascade');
-            $table->foreignId('tournament_id')->nullable(false)->constrained()->onDelete('cascade');
-            $table->unsignedTinyInteger('position')->nullable(false)->default(0);
+            $table->primary(['player_id', 'tournament_id']);
+            $table->foreignId('player_id')->nullable(false)->constrained();
+            $table->foreignId('tournament_id')->nullable(false)->constrained();
+            $table->boolean('is_winner')->default(false);
+            $table->foreignId('last_opponent_id')->nullable()->constrained('players');
+            $table->integer('last_round')->nullable(false)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

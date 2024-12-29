@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50)->nullable(false);
-            $table->string('lastName', 50)->nullable(false);
             $table->unsignedTinyInteger('skill_level')->nullable(false)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

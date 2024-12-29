@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gender_id')->nullable(false)->constrained('tournament_genders')->onDelete('cascade');
-            $table->foreignId('status_id')->nullable(false)->constrained('tournament_statuses')->onDelete('cascade');
+            $table->foreignId('gender_id')->nullable(false)->constrained('genders');
+            $table->foreignId('status_id')->nullable(false)->constrained('tournament_statuses');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
