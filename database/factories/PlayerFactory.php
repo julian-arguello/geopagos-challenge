@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Player;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class PlayerFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'skill_level' => $this->faker->numberBetween(0, 100)
+            'skill_level' => $this->faker->numberBetween(Player::MIN_SKILL_LEVEL, Player::MAX_SKILL_LEVEL)
         ];
     }
 }

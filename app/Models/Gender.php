@@ -18,4 +18,12 @@ class Gender extends Model
     {
         return $this->hasMany(Tournament::class);
     }
+
+    public static function getGenderOptions()
+    {
+        return [
+            'MALE' => self::MALE_ID,
+            'FEMALE' => self::FEMALE_ID,
+        ];
+    }
 }

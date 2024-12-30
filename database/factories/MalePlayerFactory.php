@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\MalePlayer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,8 +18,8 @@ class MalePlayerFactory extends Factory
     public function definition(): array
     {
         return [
-            'stength' => $this->faker->numberBetween(0, 200),
-            'movement_speed' => $this->faker->randomFloat(2, 1, 30)
+            'stength' => $this->faker->numberBetween(MalePlayer::MIN_STENGTH, MalePlayer::MAX_STENGTH),
+            'movement_speed' => $this->faker->randomFloat(2, MalePlayer::MIN_MOVEMENT_SPEED, MalePlayer::MAX_MOVEMENT_SPEED)
         ];
     }
 }

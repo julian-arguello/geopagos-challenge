@@ -24,6 +24,6 @@ class Tournament extends Model
 
     public function players(): BelongsToMany
     {
-        return $this->belongsToMany(Player::class);
+        return $this->belongsToMany(Player::class)->withPivot('is_winner', 'last_opponent_id', 'last_round');
     }
 }

@@ -13,10 +13,29 @@ class TournamentStatusesSeeder extends Seeder
      */
     public function run(): void
     {
-        TournamentStatus::create(['code' => 'No Players']);
-        TournamentStatus::create(['code' => 'Players Count Must Be a Power of 2']);
-        TournamentStatus::create(['code' => 'Playable']);
-        TournamentStatus::create(['code' => 'In Progress']);
-        TournamentStatus::create(['code' => 'Finished']);
+        TournamentStatus::create([
+            'code' => 'No Players',
+            'title' => 'Sin jugadores'
+        ]);
+
+        TournamentStatus::create([
+            'code' => 'Players Count Must Be a Power of 2',
+            'title' => 'El número de jugadores debe ser una potencia de 2'
+        ]);
+
+        TournamentStatus::create([
+            'code' => 'Playable',
+            'title' => 'Jugable'
+        ]);
+
+        TournamentStatus::create([
+            'code' => 'In Progress',
+            'title' => 'En progreso'
+        ]);
+
+        TournamentStatus::create([
+            'code' => 'Finished',
+            'title' => 'Finalizado'
+        ]);
     }
 }

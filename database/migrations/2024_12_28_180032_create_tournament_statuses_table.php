@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tournament_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable(false);
+            $table->string('title')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
         });

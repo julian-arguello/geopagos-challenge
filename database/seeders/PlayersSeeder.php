@@ -15,7 +15,7 @@ class PlayersSeeder extends Seeder
      */
     public function run(): void
     {
-        $players = Player::factory(36)->create();
+        $players = Player::factory(16)->create();
 
         $half = ceil($players->count() / 2);
 

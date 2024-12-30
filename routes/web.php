@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\TournamentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [TournamentController::class, 'index'])
+    ->name('tournament.index');
+
+Route::get('/tournament/{id}', [TournamentController::class, 'show'])
+    ->where('id', '[0-9]+')
+    ->name('tournament.show');
+
+Route::post('/tournament/play', [TournamentController::class, 'play'])
+    ->name('tournament.play');
+
 Route::get('players', [PlayerController::class, 'index']);

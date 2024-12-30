@@ -13,6 +13,9 @@ class Player extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const MAX_SKILL_LEVEL = 100;
+    const MIN_SKILL_LEVEL = 0;
+
     public function malePlayer(): HasOne
     {
         return $this->hasOne(MalePlayer::class);
@@ -25,7 +28,7 @@ class Player extends Model
 
     public function tournaments(): BelongsToMany
     {
-        return $this->belongsToMany(Tournament::class);
+        return $this->belongsToMany(Tournament::class)->withPivot('is_winner', 'last_opponent_id', 'last_round');
     }
 
     public function playersTournaments(): HasMany
