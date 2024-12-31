@@ -22,6 +22,7 @@
                 <td>{{ $tournament->gender->title}}</td>
                 <td>{{ $tournament->players->count()}}</td>
                 <td>{{ $tournament->status->title}}</td>
+                @if( $tournament->status->id === $tournamentStatus['PLAYABLE'])
                 <td>
                     <form action="{{ route('tournament.play') }}" method="POST">
                         @csrf
@@ -29,13 +30,27 @@
                         <button type="submit" class="btn btn-primary w-auto">Jugar Torneo</button>
                     </form>
                 </td>
+                @elseif( $tournament->status->id === $tournamentStatus['FINISHED'])
+                <td>
+                    <a href="{{ route('tournament.index') }}" class="btn btn-primary w-auto">Volver</a>
+                </td>
+                @endif
+
             </tr>
         </tbody>
     </table>
 
-    <h3>Jugadores Inscriptos</h3>
 
+
+    @if( $tournament->status->id !== $tournamentStatus['FINISHED'])
+    <h3>Jugadores Inscriptos</h3>
     <x-players-table :players="$tournament->players" :genderId="$tournament->gender->id" />
+    @else
+    <h3>Resultado Del Torneo</h3>
+    <x-players-results-table :players="$tournament->playersOrderedByLastRound" />
+    @endif
+
+
 
 </div>
 @endsection

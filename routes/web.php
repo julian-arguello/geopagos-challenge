@@ -25,4 +25,8 @@ Route::get('/tournament/{id}', [TournamentController::class, 'show'])
 Route::post('/tournament/play', [TournamentController::class, 'play'])
     ->name('tournament.play');
 
+Route::get('/tournament/reult/{id}', [TournamentController::class, 'result'])
+    ->where('id', '[0-9]+')
+    ->name('tournament.result');
+
 Route::get('players', [PlayerController::class, 'index']);

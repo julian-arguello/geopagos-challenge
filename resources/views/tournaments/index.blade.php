@@ -22,7 +22,7 @@
                 <td>{{ $tournament->players->count()}}</td>
                 <td>{{ $tournament->status->title}}</td>
                 <td>
-                    <a href="/tournament/{{ $tournament->id }}" class="btn btn-primary w-auto">Detalle</a>
+                    <a href="{{ route('tournament.show', ['id' => $tournament->id]) }}" class="btn btn-primary w-auto">Detalle</a>
                 </td>
             </tr>
             @endforeach

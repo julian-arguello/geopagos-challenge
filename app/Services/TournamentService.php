@@ -22,6 +22,10 @@ class TournamentService
     protected $tournament;
     protected $genderId;
 
+    protected $error = false;
+    protected $message = "El torneo se ha jugado correctamente";
+    protected $playerWinner = null;
+
     /**
      * Runs the tournament, handling the rounds and updating the tournament status.
      *
@@ -31,7 +35,14 @@ class TournamentService
      */
     public function run(Tournament $tournament)
     {
-        self::isPlayable($tournament);
+
+        try {
+            self::isPlayable($tournament);
+        } catch (\Throwable $th) {
+            $this->error = true;
+            $this->message = $th->getMessage();
+        }
+
         $this->tournament = $tournament;
         $this->genderId = $tournament->gender->id;
         $players = $tournament->players;
@@ -39,17 +50,22 @@ class TournamentService
         DB::beginTransaction();
         try {
 
-            $playerWinner = $this->round($players);
+            $this->playerWinner = $this->round($players);
             $this->tournament->status_id = TournamentStatus::FINISHED;
             $this->tournament->save();
 
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw new Exception("Error al ejecutar el torneo: " . $th->getMessage(), 0, $th);
+            $this->error = true;
+            $this->message = $th->getMessage();
         }
 
-        return $playerWinner;
+        $response = new \stdClass();
+        $response->status = !$this->error ? 'success' : 'error';
+        $response->message = $this->message;
+        $response->playerWinner = $this->playerWinner;
+        return $response;
     }
 
     /**
@@ -59,27 +75,27 @@ class TournamentService
      * @param \Illuminate\Support\Collection $players Collection of players to compete.
      * @return Player The winner of the round.
      */
-    protected function round($players)
+    protected function round($players, $round = 1)
     {
         $newPlayers = collect();
         $half = $players->count() / 2;
+        $lastRound = floor(log($players->count(), 2));
         $teamA = $players->take($half)->values();
         $teamB = $players->skip($half)->values();
         $index = 0;
-        $round = 1;
 
         while ($index < $half) {
             $playerWinner = $this->match($teamA[$index], $teamB[$index], $round);
             $newPlayers->push($playerWinner);
             $index++;
-            $round++;
         }
 
         if ($newPlayers->count() > 1) {
-            $playerWinner = $this->round($newPlayers);
+            $playerWinner = $this->round($newPlayers, $round + 1);
         }
 
-        $this->setWinner($playerWinner, $half);
+        $this->setWinner($playerWinner, $lastRound);
+
         return $playerWinner;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tournament;
+use App\Models\TournamentStatus;
 use App\Services\TournamentService;
 use Illuminate\Http\Request;
 
@@ -26,24 +27,27 @@ class TournamentController extends Controller
     public function show($id)
     {
         $tournament = Tournament::findOrFail($id);
-        return view('tournaments.show', compact('tournament'));
+        $tournamentStatus = TournamentStatus::getTournamentStatusOptions();
+        return view('tournaments.show', compact('tournament', 'tournamentStatus'));
     }
 
     public function play(Request $request)
     {
-        $tournamentId = $request->input('tournament_id');
-
+        $tournamentId = (int) $request->input('tournament_id');
         $tournament = Tournament::findOrFail($tournamentId);
+        $tournamentResult = $this->tournamentService->run($tournament);
+        return redirect()->route('tournament.show', ['id' => $tournament->id])
+            ->with([
+                'status' => $tournamentResult->status,
+                'message' => $tournamentResult->message
+            ]);
+    }
 
-        //TODO: verificar si si el valor esperado es correcto.
+    public function result($id)
+    {
+        $tournament = Tournament::findOrFail($id);
+        $tournamentStatus = TournamentStatus::getTournamentStatusOptions();
 
-        if ($tournament) {
-
-            $this->tournamentService->run($tournament);
-
-            return view('tournaments.show', compact('tournament'));
-        } else {
-            dd("TODO: MANEJAR EL ERROR");
-        }
+        return view('tournaments.result', compact('tournament', 'tournamentStatus',));
     }
 }

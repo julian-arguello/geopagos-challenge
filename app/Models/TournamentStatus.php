@@ -21,4 +21,16 @@ class TournamentStatus extends Model
     {
         return $this->hasMany(Tournament::class);
     }
+
+
+    public static function getTournamentStatusOptions()
+    {
+        return [
+            'NO_PLAYERS' => self::NO_PLAYERS,
+            'PLAYERS_COUNT_MUST_BE_A_POWER_OF_2' => self::PLAYERS_COUNT_MUST_BE_A_POWER_OF_2,
+            'PLAYABLE' => self::PLAYABLE,
+            'IN_PROGRESS' => self::IN_PROGRESS,
+            'FINISHED' => self::FINISHED
+        ];
+    }
 }
