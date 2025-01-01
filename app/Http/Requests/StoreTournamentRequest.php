@@ -45,7 +45,7 @@ class StoreTournamentRequest extends FormRequest
             ]);
         } elseif ($this->input('tournament_gender') === 'FEMALE') {
             $rules = array_merge($rules, [
-                'players.*.reaction_time' => 'required|integer|min:' . FemalePlayer::MIN_REACTION_TIME . '|max:' . FemalePlayer::MAX_REACTION_TIME,
+                'players.*.reaction_time' => 'required|integer|min:' . FemalePlayer::MAX_REACTION_TIME . '|max:' . FemalePlayer::MIN_REACTION_TIME,
                 'players.*.stength' => 'prohibited',
                 'players.*.movement_speed' => 'prohibited',
             ]);

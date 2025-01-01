@@ -1,0 +1,867 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Torneo de Tenis API",
+        "contact": {
+            "email": "julian.andres.arguello@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api/",
+            "description": "Servidor local de desarrollo"
+        }
+    ],
+    "paths": {
+        "/players": {
+            "get": {
+                "tags": [
+                    "Players"
+                ],
+                "summary": "Obtener lista de jugadores",
+                "description": "Devuelve una lista de jugadores agrupados por género",
+                "operationId": "0cc07f866d152376818ce933a7d84646",
+                "responses": {
+                    "200": {
+                        "description": "Respuesta exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Estado de la respuesta",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "Mensaje de la respuesta",
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "femalePlayers": {
+                                                    "description": "Lista de jugadoras femeninas",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/FemalePlayerData"
+                                                    }
+                                                },
+                                                "malePlayers": {
+                                                    "description": "Lista de jugadores masculinos",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/MalePlayerData"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/profiles/{id}": {
+            "get": {
+                "tags": [
+                    "Players"
+                ],
+                "summary": "Obtener los detalles de un jugador",
+                "description": "Devuelve los detalles de un jugador por ID, incluyendo información adicional si es masculino o femenino",
+                "operationId": "23416b602d56220247b2f74592698147",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del jugador a obtener",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Jugador encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Estado de la operación",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "Mensaje de la operación",
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MalePlayerData"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Jugador no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Estado de la operación",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "Mensaje de error",
+                                            "type": "string",
+                                            "example": "No existe un Jugador con el ID proporcionado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tournaments": {
+            "get": {
+                "tags": [
+                    "Tournaments"
+                ],
+                "summary": "Obtener lista de torneos",
+                "description": "Devuelve la lista de torneos con sus géneros y estados asociados. \n     *                  Puedes filtrar los torneos por género utilizando el parámetro de consulta `gender` \n     *                  con valores `MALE` o `FEMALE`.",
+                "operationId": "7810a369e52949739b11960d12c9f324",
+                "parameters": [
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "Filtro opcional por género de los torneos (MALE o FEMALE)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "MALE",
+                                "FEMALE"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de torneos encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Estado de la operación",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "Mensaje de la operación",
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "oneOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/Tournament"
+                                                    },
+                                                    {
+                                                        "$ref": "#/components/schemas/Tournament"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tournaments"
+                ],
+                "summary": "Crear y jugar un torneo",
+                "description": "Crea un torneo con jugadores asignados, inicia el torneo y devuelve los resultados.",
+                "operationId": "3bef609a811336de7bf6eb0a27b71652",
+                "requestBody": {
+                    "description": "Datos para crear un torneo",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "tournament_gender",
+                                    "players"
+                                ],
+                                "properties": {
+                                    "tournament_gender": {
+                                        "description": "Género del torneo ('MALE' o 'FEMALE')",
+                                        "type": "string"
+                                    },
+                                    "players": {
+                                        "description": "Lista de jugadores para el torneo",
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "name",
+                                                "skill_level",
+                                                "stength",
+                                                "movement_speed"
+                                            ],
+                                            "properties": {
+                                                "name": {
+                                                    "description": "Nombre del jugador",
+                                                    "type": "string"
+                                                },
+                                                "skill_level": {
+                                                    "description": "Nivel de habilidad del jugador",
+                                                    "type": "integer"
+                                                },
+                                                "stength": {
+                                                    "description": "Fuerza del jugador",
+                                                    "type": "integer"
+                                                },
+                                                "movement_speed": {
+                                                    "description": "Velocidad de movimiento del jugador",
+                                                    "type": "integer"
+                                                },
+                                                "reaction_time": {
+                                                    "description": "Tiempo de reacción (opcional para jugadores femeninos)",
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "hooho": {
+                                                    "description": "Atributo adicional opcional",
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "minItems": 2
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "maleTournament": {
+                                    "summary": "Ejemplo de torneo masculino",
+                                    "value": {
+                                        "tournament_gender": "MALE",
+                                        "players": [
+                                            {
+                                                "name": "Lucas Gonzalez",
+                                                "skill_level": 70,
+                                                "stength": 230,
+                                                "movement_speed": 6
+                                            },
+                                            {
+                                                "name": "Julián Ramirez",
+                                                "skill_level": 68,
+                                                "stength": 216,
+                                                "movement_speed": 5
+                                            },
+                                            {
+                                                "name": "Carlos Ramoz",
+                                                "skill_level": 78,
+                                                "stength": 228,
+                                                "movement_speed": 8
+                                            },
+                                            {
+                                                "name": "Juan Mirez",
+                                                "skill_level": 56,
+                                                "stength": 210,
+                                                "movement_speed": 7
+                                            }
+                                        ]
+                                    }
+                                },
+                                "femaleTournament": {
+                                    "summary": "Ejemplo de torneo femenino",
+                                    "value": {
+                                        "tournament_gender": "FEMALE",
+                                        "players": [
+                                            {
+                                                "name": "Maria Lopez",
+                                                "skill_level": 88,
+                                                "reaction_time": 900
+                                            },
+                                            {
+                                                "name": "Ana Saucedo",
+                                                "skill_level": 72,
+                                                "reaction_time": 850
+                                            },
+                                            {
+                                                "name": "Elina Perez",
+                                                "skill_level": 68,
+                                                "reaction_time": 260
+                                            },
+                                            {
+                                                "name": "Jessica Bonnefon",
+                                                "skill_level": 62,
+                                                "reaction_time": 200
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Torneo jugado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Torneo jugado exitosamente"
+                                        },
+                                        "data": {
+                                            "description": "Resultados del torneo",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error en los datos proporcionados"
+                                        },
+                                        "errors": {
+                                            "description": "Detalles de los errores",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tournaments/{id}": {
+            "get": {
+                "tags": [
+                    "Tournaments"
+                ],
+                "summary": "Obtener detalles de un torneo",
+                "description": "Devuelve los detalles de un torneo por ID, incluyendo género, estado y jugadores",
+                "operationId": "42ef24019687a6ca43add4fcbbd566dc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del torneo a obtener",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del torneo encontrados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Estado de la operación",
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "description": "Mensaje de la operación",
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "data": {
+                                            "description": "Detalles del torneo",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID único del torneo",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "gender_id": {
+                                                    "description": "ID del género asociado al torneo",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "status_id": {
+                                                    "description": "ID del estado del torneo",
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "created_at": {
+                                                    "description": "Fecha de creación del torneo",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-01-01T16:31:13.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "description": "Fecha de última actualización del torneo",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-01-01T16:31:13.000000Z"
+                                                },
+                                                "deleted_at": {
+                                                    "description": "Fecha de eliminación del torneo",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "status": {
+                                                    "$ref": "#/components/schemas/TournamentStatus"
+                                                },
+                                                "gender": {
+                                                    "$ref": "#/components/schemas/Gender"
+                                                },
+                                                "players": {
+                                                    "description": "Lista de jugadores asociados al torneo",
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "description": "ID único del jugador",
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "description": "Nombre del jugador",
+                                                                "type": "string",
+                                                                "example": "John Doe"
+                                                            },
+                                                            "skill_level": {
+                                                                "description": "Nivel de habilidad del jugador",
+                                                                "type": "integer",
+                                                                "example": 85
+                                                            },
+                                                            "created_at": {
+                                                                "description": "Fecha de creación",
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2025-01-01T16:31:13.000000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "description": "Fecha de última actualización",
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2025-01-01T16:31:13.000000Z"
+                                                            },
+                                                            "deleted_at": {
+                                                                "description": "Fecha de eliminación",
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": null,
+                                                                "nullable": true
+                                                            },
+                                                            "pivot": {
+                                                                "description": "Información adicional del jugador en el torneo",
+                                                                "properties": {
+                                                                    "tournament_id": {
+                                                                        "description": "ID del torneo asociado",
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "player_id": {
+                                                                        "description": "ID del jugador asociado",
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "is_winner": {
+                                                                        "description": "Indica si el jugador es el ganador del torneo",
+                                                                        "type": "boolean",
+                                                                        "example": false
+                                                                    },
+                                                                    "last_opponent_id": {
+                                                                        "description": "ID del último oponente del jugador",
+                                                                        "type": "integer",
+                                                                        "example": null,
+                                                                        "nullable": true
+                                                                    },
+                                                                    "last_round": {
+                                                                        "description": "Última ronda alcanzada por el jugador",
+                                                                        "type": "integer",
+                                                                        "example": 0
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Torneo no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Estado de la operación",
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "description": "Mensaje de error",
+                                            "type": "string",
+                                            "example": "No existe un torneo con el ID proporcionado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "FemalePlayerData": {
+                "description": "Datos de una jugadora femenina",
+                "properties": {
+                    "id": {
+                        "description": "ID único del jugador",
+                        "type": "integer",
+                        "example": 16
+                    },
+                    "name": {
+                        "description": "Nombre de la jugadora",
+                        "type": "string",
+                        "example": "Mariana Reilly"
+                    },
+                    "skill_level": {
+                        "description": "Nivel de habilidad de la jugadora",
+                        "type": "integer",
+                        "example": 18
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de actualización",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha de eliminación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "female_player": {
+                        "description": "Datos específicos de la jugadora femenina",
+                        "properties": {
+                            "player_id": {
+                                "description": "ID del jugador asociado",
+                                "type": "integer",
+                                "example": 16
+                            },
+                            "reaction_time": {
+                                "description": "Tiempo de reacción de la jugadora",
+                                "type": "integer",
+                                "example": 2216
+                            },
+                            "created_at": {
+                                "description": "Fecha de creación",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-01T16:31:13.000000Z"
+                            },
+                            "updated_at": {
+                                "description": "Fecha de actualización",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-01T16:31:13.000000Z"
+                            },
+                            "deleted_at": {
+                                "description": "Fecha de eliminación",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": null,
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "Gender": {
+                "description": "Géneros",
+                "properties": {
+                    "id": {
+                        "description": "ID único del género",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "code": {
+                        "description": "Código del género",
+                        "type": "string",
+                        "example": "Male"
+                    },
+                    "title": {
+                        "description": "Título del género",
+                        "type": "string",
+                        "example": "Masculino"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación del género",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización del género",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha de eliminación del género",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "MalePlayerData": {
+                "description": "Datos de un jugador masculino",
+                "properties": {
+                    "id": {
+                        "description": "ID único del jugador",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del jugador",
+                        "type": "string",
+                        "example": "Julián Argüello"
+                    },
+                    "skill_level": {
+                        "description": "Nivel de habilidad del jugador",
+                        "type": "integer",
+                        "example": 92
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de actualización",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha de eliminación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "male_player": {
+                        "description": "Datos específicos del jugador masculino",
+                        "properties": {
+                            "player_id": {
+                                "description": "ID del jugador asociado",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "stength": {
+                                "description": "Fuerza del jugador",
+                                "type": "integer",
+                                "example": 228
+                            },
+                            "movement_speed": {
+                                "description": "Velocidad de movimiento del jugador",
+                                "type": "number",
+                                "format": "float",
+                                "example": 9.34
+                            },
+                            "created_at": {
+                                "description": "Fecha de creación",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-01T16:31:13.000000Z"
+                            },
+                            "updated_at": {
+                                "description": "Fecha de actualización",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-01T16:31:13.000000Z"
+                            },
+                            "deleted_at": {
+                                "description": "Fecha de eliminación",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": null,
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "Tournament": {
+                "description": "Representación de un torneo",
+                "properties": {
+                    "id": {
+                        "description": "ID único del torneo",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "gender_id": {
+                        "description": "ID del género asociado al torneo",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "status_id": {
+                        "description": "ID del estado del torneo",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación del torneo",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización del torneo",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha de eliminación del torneo",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/TournamentStatus"
+                    },
+                    "gender": {
+                        "$ref": "#/components/schemas/Gender"
+                    }
+                },
+                "type": "object"
+            },
+            "TournamentStatus": {
+                "description": "Estado del torneo",
+                "properties": {
+                    "id": {
+                        "description": "ID único del estado",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "code": {
+                        "description": "Código del estado",
+                        "type": "string",
+                        "example": "Playable"
+                    },
+                    "title": {
+                        "description": "Título del estado",
+                        "type": "string",
+                        "example": "Jugable"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación del estado",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización del estado",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T16:31:13.000000Z"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha de eliminación del estado",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Tournaments",
+            "description": "Endpoints relacionados con Torneos"
+        },
+        {
+            "name": "Players",
+            "description": "Players"
+        }
+    ]
+}

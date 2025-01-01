@@ -17,7 +17,7 @@ class PlayersTable extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct($players = [], $genderId)
+    public function __construct($genderId, $players = [])
     {
         $this->players = $players;
         $this->gender_id = $genderId;

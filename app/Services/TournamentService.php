@@ -39,8 +39,7 @@ class TournamentService
         try {
             self::isPlayable($tournament);
         } catch (\Throwable $th) {
-            $this->error = true;
-            $this->message = $th->getMessage();
+            throw new Exception($th->getMessage(), 422, $th);
         }
 
         $this->tournament = $tournament;

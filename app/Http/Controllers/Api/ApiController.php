@@ -4,6 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+/**
+ * @OA\Info(
+ *     title="Torneo de Tenis API",
+ *     version="1.0",
+ *     @OA\Contact(
+ *         email="julian.andres.arguello@gmail.com"
+ *     )
+ * ),
+ * @OA\Server(
+ *     url="http://localhost/api/",
+ *     description="Servidor local de desarrollo"
+ * )
+ */
 class ApiController extends Controller
 {
 
