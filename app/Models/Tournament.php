@@ -12,6 +12,9 @@ class Tournament extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['gender_id', 'status_id'];
+
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(TournamentStatus::class);

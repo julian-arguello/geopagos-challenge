@@ -85,7 +85,7 @@ class TournamentService
         $index = 0;
 
         while ($index < $half) {
-            $playerWinner = $this->match($teamA[$index], $teamB[$index], $round);
+            $playerWinner = $this->match($teamA[$index], $teamB[$index], $round, $this->genderId);
             $newPlayers->push($playerWinner);
             $index++;
         }
@@ -109,11 +109,11 @@ class TournamentService
      * @param int $round The round number in which the match takes place.
      * @return Player The winning player.
      */
-    protected function match(Player $playerOne, Player $playerTwo, int $round)
+    protected function match(Player $playerOne, Player $playerTwo, int $round, int $genderId)
     {
         $luckyPlayer = self::assignLuck([$playerOne, $playerTwo]);
-        $scorePlayerOne = $this->scoreCalculator($playerOne, $this->genderId);
-        $scorePlayerTwo = $this->scoreCalculator($playerTwo, $this->genderId);
+        $scorePlayerOne = $this->scoreCalculator($playerOne, $genderId);
+        $scorePlayerTwo = $this->scoreCalculator($playerTwo, $genderId);
 
         $scorePlayerOne = ($playerOne === $luckyPlayer) ? $scorePlayerOne * self::LUCK_FACTOR : $scorePlayerOne;
         $scorePlayerTwo = ($playerTwo === $luckyPlayer) ? $scorePlayerTwo * self::LUCK_FACTOR : $scorePlayerTwo;
@@ -166,7 +166,7 @@ class TournamentService
      * Calculates a player's score based on their skill level, 
      * physical attributes, and gender.
      * 
-     * For male players, strength and movement speed are included. 
+     * For male players, stength and movement speed are included. 
      * For female players, reaction time is considered.
      *
      * @param Player $player The player to evaluate.
@@ -221,7 +221,7 @@ class TournamentService
      * @param int $n The number to check.
      * @return bool `true` if the number is a power of 2, otherwise `false`.
      */
-    protected static function isPowerOfTwo(int $n)
+    public static function isPowerOfTwo(int $n)
     {
         return ($n > 0) && (($n & ($n - 1)) == 0);
     }

@@ -18,7 +18,6 @@ class PlayerController extends Controller
         $genderOptions = Gender::getGenderOptions();
         $tournamentStatus = TournamentStatus::getTournamentStatusOptions();
 
-
         return view('players.index', compact('femalePlayers', 'malePlayers', 'genderOptions', 'tournamentStatus'));
     }
 }

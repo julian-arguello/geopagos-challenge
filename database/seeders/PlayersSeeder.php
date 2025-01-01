@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Player;
 use App\Models\MalePlayer;
 use App\Models\FemalePlayer;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PlayersSeeder extends Seeder

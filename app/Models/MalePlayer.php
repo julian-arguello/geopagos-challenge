@@ -11,6 +11,10 @@ class MalePlayer extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['stength', 'movement_speed', 'reaction_time', 'player_id'];
+
+
+
     const MAX_STENGTH = 2500; // n 
     const MIN_STENGTH = 0; // n 
     const MAX_MOVEMENT_SPEED = 10.0; // m/s
@@ -19,5 +23,24 @@ class MalePlayer extends Model
     public function player(): BelongsTo
     {
         return $this->belongsTo(Player::class, 'player_id');
+    }
+
+
+    public static function createAndAssignToTournament(array $playerData, Tournament $tournament)
+    {
+        $player = Player::create([
+            'name' => $playerData['name'],
+            'skill_level' => $playerData['skill_level'],
+        ]);
+
+        $malePlayer = self::create([
+            'stength' => $playerData['stength'],
+            'movement_speed' => $playerData['movement_speed'],
+            'player_id' => $player->id,
+        ]);
+
+        $tournament->players()->attach($player->id);
+
+        return $malePlayer;
     }
 }

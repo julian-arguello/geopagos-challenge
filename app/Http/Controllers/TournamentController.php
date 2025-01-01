@@ -14,7 +14,6 @@ class TournamentController extends Controller
 
     public function __construct(TournamentService $tournamentService)
     {
-
         $this->tournamentService  = $tournamentService;
     }
 

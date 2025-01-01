@@ -13,6 +13,8 @@ class Player extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['name', 'skill_level'];
+
     const MAX_SKILL_LEVEL = 100;
     const MIN_SKILL_LEVEL = 0;
 
