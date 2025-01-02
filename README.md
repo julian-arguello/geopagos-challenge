@@ -70,11 +70,10 @@ composer install
 ```bash
 ./vendor/bin/sail artisan migrate:refresh --seed
 ```
-#### 6. Accede al proyecto en tu navegador
-```bash
-# El proyecto estará disponible en http://localhost donde se puede ver el listado de torneos.
 
-```
+#### 6. Accede al proyecto en tu navegador
+El proyecto estará disponible en [http://localhost](http://localhost), donde se puede ver el listado de torneos.
+
 ---
 
 ## Proceso por el cual se calcula al ganador (teniendo en cuenta la suerte)
