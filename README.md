@@ -43,25 +43,35 @@ El objetivo es modelar el comportamiento de un torneo de tenis con las siguiente
 
 ## Cómo ejecutar el proyecto
 
+
+#### 1. Clona el repositorio
 ```bash
-# 1. Clona el repositorio
 git clone https://github.com/julian-arguello/geopagos-challenge.git
 cd geopagos-challenge
+```
 
-# 2. Configura el archivo de entorno
+#### 2. Configura el archivo de entorno
+(Ajusta las variables necesarias en el archivo ".env").
+```bash
 cp .env.example .env
-# Ajusta las variables necesarias en el archivo .env.
+```
 
-# 3. Instala las dependencias de Composer
+#### 3. Instala las dependencias de Composer
+```bash
 composer install
+```
 
-# 4. Levanta los contenedores con Laravel Sail
-./vendor/bin/sail up
+#### 4. Levanta los contenedores con Laravel Sail
+```bash
+./vendor/bin/sail up -d
+```
 
-# 5. Ejecuta las migraciones y seeders para inicializar la base de datos
+#### 5. Ejecuta las migraciones y seeders para inicializar la base de datos
+```bash
 ./vendor/bin/sail artisan migrate:refresh --seed
-
-# 6. Accede al proyecto en tu navegador
+```
+#### 6. Accede al proyecto en tu navegador
+```bash
 # El proyecto estará disponible en http://localhost donde se puede ver el listado de torneos.
 
 ```
